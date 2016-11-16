@@ -1,5 +1,6 @@
 package com.yahoo.yuningj.nytimessearch.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -7,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -53,6 +55,21 @@ public class SearchActivity extends AppCompatActivity {
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
+
+        //hook up listener for grid click
+        gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //create an intent to display the article
+                Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
+                //get the article to display
+                Article article = articles.get(i);
+                //pass in that article into intent
+                intent.putExtra("article", article);
+                //launch the activity
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

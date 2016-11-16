@@ -50,6 +50,8 @@ public class ArticleArrayAdapter extends ArrayAdapter<Article> {
 
         if (!TextUtils.isEmpty(thumbnail)) {
             Picasso.with(getContext()).load(thumbnail).into(imageView);
+        } else {
+            Picasso.with(getContext()).load("https://static01.nyt.com/images/icons/t_logo_291_black.png").into(imageView);
         }
 
         return convertView;
