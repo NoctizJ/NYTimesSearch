@@ -1,4 +1,4 @@
-package com.yahoo.yuningj.nytimessearch;
+package com.yahoo.yuningj.nytimessearch.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
+import com.yahoo.yuningj.nytimessearch.Article;
+import com.yahoo.yuningj.nytimessearch.ArticleArrayAdapter;
+import com.yahoo.yuningj.nytimessearch.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
