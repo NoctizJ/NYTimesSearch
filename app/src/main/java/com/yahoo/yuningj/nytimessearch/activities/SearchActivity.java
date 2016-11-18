@@ -19,6 +19,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.yahoo.yuningj.nytimessearch.Article;
 import com.yahoo.yuningj.nytimessearch.ArticleArrayAdapter;
+import com.yahoo.yuningj.nytimessearch.EndlessScrollListener;
 import com.yahoo.yuningj.nytimessearch.R;
 
 import org.json.JSONArray;
@@ -53,6 +54,17 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
+
+        gvResults.setOnScrollListener(new EndlessScrollListener() {
+            @Override
+            public boolean onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to your AdapterView
+                loadNextDataFromApi(page);
+                // or loadNextDataFromApi(totalItemsCount);
+                return true; // ONLY if more data is actually being loaded; false otherwise.
+            }
+        });
         //reloadQueryRefined(query, beginDate, endDate, sortOrder);
     }
 
@@ -117,18 +129,19 @@ public class SearchActivity extends AppCompatActivity {
             Toast.makeText(this, "Search for " + query, Toast.LENGTH_LONG).show();
 
         }
-        reloadQueryRefined(query, beginDate, endDate, sortOrder);
+        articles.clear();
+        reloadQueryRefined(query, 0, beginDate, endDate, sortOrder);
     }
 
 //
 
-    private void reloadQueryRefined(String query, String b, String e, String s) {
+    private void reloadQueryRefined(String query, int page, String b, String e, String s) {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
         RequestParams params = new RequestParams();
         params.put("api-key", "06dc7ea1872b44dd861f35eea5c21d4e");
-        //params.put("page", 0);
+        params.put("page", page);
         params.put("q", query);
         if (!b.isEmpty()) params.put("begin_date", b);
         if (!e.isEmpty()) params.put("end_date", e);
@@ -143,7 +156,6 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                     //Log.d("DEBUG", articleJsonResults.toString());
-                    articles.clear();
                     articles.addAll(Article.fromJSONArray(articleJsonResults));
                     adapter.notifyDataSetChanged();
                     Log.d("DEBUG", articles.toString());
@@ -170,10 +182,19 @@ public class SearchActivity extends AppCompatActivity {
             beginDate = data.getExtras().getString("beginDate");
             endDate = data.getExtras().getString("endDate");
             sortOrder = data.getExtras().getString("sortOrder");
-
-            reloadQueryRefined(query, beginDate, endDate, sortOrder);
+            articles.clear();
+            reloadQueryRefined(query, 0, beginDate, endDate, sortOrder);
             // Toast the name to display temporarily on screen
             //Toast.makeText(this, beginDate + endDate, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void loadNextDataFromApi(int offset) {
+        // Send an API request to retrieve appropriate paginated data
+        //  --> Send the request including an offset value (i.e `page`) as a query parameter.
+        //  --> Deserialize and construct new model objects from the API response
+        //  --> Append the new data objects to the existing set of items inside the array of items
+        //  --> Notify the adapter of the new items made with `notifyDataSetChanged()`
+        reloadQueryRefined(query, offset, beginDate, endDate, sortOrder);
     }
 }
