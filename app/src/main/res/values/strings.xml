@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">NYTimesSearch</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Filter</string>
     <string name="hint">Enter Search Query</string>
     <string name="search">Search</string>
     <string name="title_activity_article">ArticleActivity</string>
+    <string name="title_activity_filter">FilterActivity</string>
+    <string name="sortNewest">Newest</string>
+    <string name="sortOldest">Oldest</string>
+    <string name="beginText">Begin Date</string>
+    <string name="endText">End Date</string>
+    <string name="sortText">Sort Options</string>
+    <string name="hintDate">YYYYMMDD</string>
+    <string name="btSubmit">Apply Filter</string>
 </resources>

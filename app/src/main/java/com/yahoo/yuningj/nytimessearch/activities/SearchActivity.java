@@ -38,6 +38,14 @@ public class SearchActivity extends AppCompatActivity {
     ArrayList<Article> articles;
     ArticleArrayAdapter adapter;
 
+    String beginDate;
+    String endDate;
+    String sortOrder;
+
+    String query;
+
+    private final int REQUEST_CODE = 20;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +53,7 @@ public class SearchActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         setupViews();
-
+        //reloadQueryRefined(query, beginDate, endDate, sortOrder);
     }
 
     public void setupViews() {
@@ -55,6 +63,12 @@ public class SearchActivity extends AppCompatActivity {
         articles = new ArrayList<>();
         adapter = new ArticleArrayAdapter(this, articles);
         gvResults.setAdapter(adapter);
+
+        // data init
+        beginDate = new String();
+        endDate = new String();
+        sortOrder = new String();
+        query = new String();
 
         //hook up listener for grid click
         gvResults.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -95,17 +109,30 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void onArticleSearch(View view) {
-        String query = etQuery.getText().toString();
+        query = etQuery.getText().toString();
 
-        Toast.makeText(this, "Search for " + query, Toast.LENGTH_LONG).show();
+        if (query.isEmpty()) {
+            Toast.makeText(this, "Please enter what you want to search", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Search for " + query, Toast.LENGTH_LONG).show();
 
+        }
+        reloadQueryRefined(query, beginDate, endDate, sortOrder);
+    }
+
+//
+
+    private void reloadQueryRefined(String query, String b, String e, String s) {
         AsyncHttpClient client = new AsyncHttpClient();
         String url = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
 
         RequestParams params = new RequestParams();
         params.put("api-key", "06dc7ea1872b44dd861f35eea5c21d4e");
-        params.put("page", 0);
+        //params.put("page", 0);
         params.put("q", query);
+        if (!b.isEmpty()) params.put("begin_date", b);
+        if (!e.isEmpty()) params.put("end_date", e);
+        if (!s.isEmpty()) params.put("sort", s);
 
         client.get(url, params, new JsonHttpResponseHandler() {
             @Override
@@ -116,6 +143,7 @@ public class SearchActivity extends AppCompatActivity {
                 try {
                     articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
                     //Log.d("DEBUG", articleJsonResults.toString());
+                    articles.clear();
                     articles.addAll(Article.fromJSONArray(articleJsonResults));
                     adapter.notifyDataSetChanged();
                     Log.d("DEBUG", articles.toString());
@@ -124,5 +152,28 @@ public class SearchActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void goFilter(MenuItem item) {
+        Intent intent = new Intent(SearchActivity.this, FilterActivity.class);
+        intent.putExtra("beginDate", beginDate);
+        intent.putExtra("endDate", endDate);
+        intent.putExtra("sortOrder", sortOrder);
+        startActivityForResult(intent, REQUEST_CODE);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // REQUEST_CODE is defined above
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            // Extract name value from result extras
+            beginDate = data.getExtras().getString("beginDate");
+            endDate = data.getExtras().getString("endDate");
+            sortOrder = data.getExtras().getString("sortOrder");
+
+            reloadQueryRefined(query, beginDate, endDate, sortOrder);
+            // Toast the name to display temporarily on screen
+            //Toast.makeText(this, beginDate + endDate, Toast.LENGTH_SHORT).show();
+        }
     }
 }

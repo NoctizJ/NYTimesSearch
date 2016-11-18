@@ -42,5 +42,6 @@
         android:layout_below="@+id/btnSearch"
         android:layout_centerHorizontal="true"
         android:id="@+id/gvResults"
-        android:numColumns="4" />
+        android:numColumns="4"
+        android:paddingTop="10dp" />
 </RelativeLayout>

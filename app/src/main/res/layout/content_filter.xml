@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content_filter"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.yahoo.yuningj.nytimessearch.activities.FilterActivity"
+    tools:showIn="@layout/activity_filter">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvBegin"
+        android:text="@string/beginText"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/etBeginDate"
+        android:layout_alignBottom="@+id/etBeginDate"
+        android:layout_toStartOf="@+id/etBeginDate"
+        android:layout_toLeftOf="@+id/etBeginDate" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etEndDate"
+        android:layout_below="@+id/etBeginDate"
+        android:layout_alignLeft="@+id/etBeginDate"
+        android:layout_alignStart="@+id/etBeginDate"
+        android:gravity="right"
+        android:hint="@string/hintDate" />
+
+    <TextView
+        android:text="@string/sortText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvSort"
+        android:textSize="24sp"
+        android:layout_marginRight="62dp"
+        android:layout_marginEnd="62dp"
+        android:layout_above="@+id/rbOldest"
+        android:layout_alignRight="@+id/rbOldest"
+        android:layout_alignEnd="@+id/rbOldest" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvEnd"
+        android:text="@string/endText"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/etEndDate"
+        android:layout_alignBottom="@+id/etEndDate"
+        android:layout_alignLeft="@+id/rbNewest"
+        android:layout_alignStart="@+id/rbNewest" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/etBeginDate"
+        android:layout_marginRight="16dp"
+        android:layout_marginEnd="16dp"
+        android:hint="@string/hintDate"
+        android:gravity="right"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <RadioButton
+        android:text="@string/sortOldest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/rbOldest"
+        android:textSize="24sp"
+        android:layout_alignBaseline="@+id/rbNewest"
+        android:layout_alignBottom="@+id/rbNewest"
+        android:layout_toRightOf="@+id/rbNewest"
+        android:layout_toEndOf="@+id/rbNewest"
+        android:layout_marginLeft="29dp"
+        android:layout_marginStart="29dp"
+        android:onClick="onClickOldest"
+        android:selectAllOnFocus="false" />
+
+    <RadioButton
+        android:text="@string/sortNewest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="59dp"
+        android:id="@+id/rbNewest"
+        android:textSize="24sp"
+        android:layout_below="@+id/etEndDate"
+        android:layout_alignLeft="@+id/tvBegin"
+        android:onClick="onClickNewest"
+        android:layout_alignStart="@+id/tvBegin" />
+
+    <Button
+        android:text="@string/btSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rbOldest"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="54dp"
+        android:onClick="onApplyFilter"
+        android:id="@+id/btSubmit" />
+</RelativeLayout>
